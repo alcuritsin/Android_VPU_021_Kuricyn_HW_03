@@ -28,12 +28,6 @@
             android:layout_weight="3"
             android:orientation="vertical">
 
-            <View
-                android:id="@+id/divider2"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="?android:attr/listDivider" />
-
             <TextView
                 android:id="@+id/tvLastName"
                 android:layout_width="match_parent"
@@ -60,12 +54,6 @@
                 android:paddingTop="5dp"
                 android:paddingBottom="5dp"
                 android:text="Дата рождения" />
-
-            <View
-                android:id="@+id/divider"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="?android:attr/listDivider" />
 
         </LinearLayout>
     </LinearLayout>
