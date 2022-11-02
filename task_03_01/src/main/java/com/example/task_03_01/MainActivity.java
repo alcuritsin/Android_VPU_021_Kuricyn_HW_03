@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -32,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
     private static Bitmap pngMale, pngFemale;
 
     /** Цвет фона не выбранного элемента */
-    private int nrmColor = Color.rgb(0xED, 0xE2, 0x75);
+    private int nrmColor = Color.TRANSPARENT;
     /** Цвет фона выбранного элемента */
     private int slctColor = Color.rgb(0xE2,0xA7, 0x6F);
     /** Индекс выбранного элемента */
@@ -106,12 +107,40 @@ public class MainActivity extends AppCompatActivity {
                     ivIcon.setImageBitmap(pngFemale);
                 }
 
+                //--    Подсветка отмеченного элемента списка
+                if (position == MainActivity.this.curItem)
+                {
+                    view.setBackgroundColor(MainActivity.this.slctColor);
+                    MainActivity.this.curView = view;
+                }
+                else
+                {
+                    view.setBackgroundColor(MainActivity.this.nrmColor);
+                }
+
                 return view;
             }
         };
 
         //--    Назначение Адаптера Данных списку
         this.lvHumans.setAdapter(adapter);
+
+        //--    Назначение обработчика события клика по элементу списка
+        this.lvHumans.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //--    Снимаем выделение с предыдущего выделеного элемента
+                if (MainActivity.this.curItem != -1)
+                {
+                    MainActivity.this.curView.setBackgroundColor(MainActivity.this.nrmColor);
+                }
+
+                //--    Установка выделения на текущий элемент списка
+                MainActivity.this.curItem = position;
+                MainActivity.this.curView = view;
+                MainActivity.this.curView.setBackgroundColor(MainActivity.this.slctColor);
+            }
+        });
     }
 
 
