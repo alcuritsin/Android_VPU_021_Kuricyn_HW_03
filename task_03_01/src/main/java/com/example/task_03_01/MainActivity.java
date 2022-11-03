@@ -3,13 +3,16 @@ package com.example.task_03_01;
 import static android.content.ContentValues.TAG;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.view.menu.MenuBuilder;
 
+import android.annotation.SuppressLint;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -141,6 +144,23 @@ public class MainActivity extends AppCompatActivity {
                 MainActivity.this.curView.setBackgroundColor(MainActivity.this.slctColor);
             }
         });
+    }
+
+    @SuppressLint("RestrictedApi")
+    @Override
+    public boolean onCreateOptionsMenu (Menu menu)
+    {
+        //-- Добавление меню
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+
+        if (menu instanceof MenuBuilder)
+        {
+            MenuBuilder m = (MenuBuilder) menu;
+            //!! Проблема с отображением иконок меню.
+            m.setOptionalIconsVisible(true);
+        }
+
+        return true;
     }
 
 
