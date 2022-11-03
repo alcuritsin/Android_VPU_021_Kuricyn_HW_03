@@ -2,17 +2,21 @@ package com.example.task_03_01;
 
 import static android.content.ContentValues.TAG;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.menu.MenuBuilder;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -23,7 +27,6 @@ import android.widget.TextView;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -34,6 +37,8 @@ public class MainActivity extends AppCompatActivity {
     private ListView lvHumans;
 
     private static Bitmap pngMale, pngFemale;
+
+    private static AlertDialog alertDialog;
 
     /** Цвет фона не выбранного элемента */
     private int nrmColor = Color.TRANSPARENT;
@@ -83,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
         this.lvHumans = (ListView) this.findViewById(R.id.lvHumans);
 
         //--    Создание адаптера Данных
-        ArrayAdapter<Human> adapter = new ArrayAdapter<Human>(this, R.layout.human_item, R.id.tvFirstName, humans) {
+        ArrayAdapter<Human> adapter = new ArrayAdapter<Human>(this, R.layout.human_item, R.id.tvFirstNameDialog, humans) {
             @Override
             public View getView (int position, View convertView, ViewGroup parent)
             {
@@ -93,8 +98,8 @@ public class MainActivity extends AppCompatActivity {
                 Human H = this.getItem(position);
 
                 //--    Получение ссылок на виджеты, для отображения информации
-                TextView tvLastName = (TextView) view.findViewById(R.id.tvLastName);
-                TextView tvFirstName = (TextView) view.findViewById(R.id.tvFirstName);
+                TextView tvLastName = (TextView) view.findViewById(R.id.tvLastNameDialog);
+                TextView tvFirstName = (TextView) view.findViewById(R.id.tvFirstNameDialog);
                 TextView tvBirthDay = (TextView) view.findViewById(R.id.tvBirthDay);
 
                 ImageView ivIcon = (ImageView) view.findViewById(R.id.ivIcon);
@@ -144,6 +149,11 @@ public class MainActivity extends AppCompatActivity {
                 MainActivity.this.curView.setBackgroundColor(MainActivity.this.slctColor);
             }
         });
+
+        //----
+        initAlertDialog();
+
+
     }
 
     @SuppressLint("RestrictedApi")
@@ -162,6 +172,12 @@ public class MainActivity extends AppCompatActivity {
 
         return true;
     }
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        alertDialog.show();
+        return true;
+    }
+
 
 
     private int getRandomNumberInRange (int min, int max)
@@ -190,5 +206,37 @@ public class MainActivity extends AppCompatActivity {
         }
         return null;
     }
+
+    private void initAlertDialog(){
+        //--    Создание объекта 'Builder'
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, android.R.style.Theme_Holo_Dialog);
+
+        //--    Формирование заголовка окна и его содержимого
+        builder.setTitle("Редактирование сотрудника");
+
+        LayoutInflater inflater = this.getLayoutInflater();
+
+        View view = inflater.inflate(R.layout.dialog_human_content, null, false);
+
+        builder.setView(view);
+
+        //--    Назначение кнопок
+        builder.setPositiveButton("Приментить", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        });
+        builder.setNegativeButton("Отменить", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        });
+
+        alertDialog = builder.create();
+
+    }
+
 
 }

@@ -29,7 +29,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/tvLastName"
+                android:id="@+id/tvLastNameDialog"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingLeft="10dp"
@@ -38,7 +38,7 @@
                 android:text="Имя" />
 
             <TextView
-                android:id="@+id/tvFirstName"
+                android:id="@+id/tvFirstNameDialog"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingLeft="10dp"
