@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">task_03_01</string>
     <string name="tvTitleApp">Список сотрудников</string>
+
+    <string name="genderMale">Мужской</string>
+    <string name="genderFemale">Женский</string>
 </resources>

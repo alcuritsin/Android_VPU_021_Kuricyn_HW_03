@@ -21,9 +21,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -40,22 +43,34 @@ public class MainActivity extends AppCompatActivity {
 
     private static AlertDialog alertDialog;
 
+    private static EditText etFirstNameDialog, etLastNameDialog;
+    private static ImageView ivGenderDialog;
+    private static TextView tvGenderValueDialog;
+    private static DatePicker dpBirthDialog;
+    private String dialogMode = null;
+
     /** Цвет фона не выбранного элемента */
     private int nrmColor = Color.TRANSPARENT;
     /** Цвет фона выбранного элемента */
     private int slctColor = Color.rgb(0xE2,0xA7, 0x6F);
     /** Индекс выбранного элемента */
-    private int curItem = -1;
+    private static int curItem = -1;
 
     /** Ссылка на виджет текущего выбранного элемента списка */
-    private View curView = null;
+    private static View curView = null;
+
+    private static Human curHuman = null;
+
+    private static ArrayList<Human> humans;
+
+    ArrayAdapter<Human> adapter;
 
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
 
         //-- Читаем иконки для контактов, в зависимости от гендера
         AssetManager AM = this.getAssets();
@@ -64,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
         pngFemale = getBitmapAsset("female.png", AM);
 
         //-- Создание коллекции псевдо случайных людей.
-        ArrayList<Human> humans = new ArrayList<>();
+        humans = new ArrayList<>();
 
         for (int i = 0; i < 50; i++)
         {
@@ -88,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
         this.lvHumans = (ListView) this.findViewById(R.id.lvHumans);
 
         //--    Создание адаптера Данных
-        ArrayAdapter<Human> adapter = new ArrayAdapter<Human>(this, R.layout.human_item, R.id.tvFirstNameDialog, humans) {
+        adapter = new ArrayAdapter<Human>(this, R.layout.human_item, R.id.tvFirstNameDialog, humans) {
             @Override
             public View getView (int position, View convertView, ViewGroup parent)
             {
@@ -120,6 +135,7 @@ public class MainActivity extends AppCompatActivity {
                 {
                     view.setBackgroundColor(MainActivity.this.slctColor);
                     MainActivity.this.curView = view;
+                    MainActivity.this.curHuman = this.getItem(position);
                 }
                 else
                 {
@@ -154,6 +170,7 @@ public class MainActivity extends AppCompatActivity {
         initAlertDialog();
 
 
+
     }
 
     @SuppressLint("RestrictedApi")
@@ -174,7 +191,91 @@ public class MainActivity extends AppCompatActivity {
     }
     public boolean onOptionsItemSelected(MenuItem item)
     {
+        int year = 0, month = 0, day = 0;
+
+        switch (item.getItemId())
+        {
+            case R.id.menuRemoveHuman:
+                if (curItem == -1) return false;
+
+                Toast.makeText(this, String.valueOf(curItem), Toast.LENGTH_SHORT).show();
+
+                humans.remove(curItem);
+                curItem = -1;
+                curView = null;
+                curHuman = null;
+
+                adapter.notifyDataSetChanged();
+
+                return true;
+
+            case R.id.menuEditHuman:
+                if (curItem == -1) return false;
+                //-- Режим открытия диалогового окна на редактирование
+                dialogMode = "edit";
+
+                curHuman = humans.get(curItem);
+
+                etFirstNameDialog.setText(curHuman.firstName);
+                etLastNameDialog.setText(curHuman.lastName);
+
+                if (curHuman.gender)
+                {
+                    ivGenderDialog.setImageBitmap(pngMale);
+                    tvGenderValueDialog.setText(R.string.genderMale);
+                }
+                else
+                {
+                    ivGenderDialog.setImageBitmap(pngFemale);
+                    tvGenderValueDialog.setText(R.string.genderFemale);
+                }
+
+                ivGenderDialog.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        changeGender();
+                    }
+                });
+
+                year = curHuman.birthDay.get(Calendar.YEAR);
+                month = curHuman.birthDay.get(Calendar.MONTH);
+                day = curHuman.birthDay.get(Calendar.DAY_OF_MONTH);
+
+                break;
+
+            case R.id.menuAddHuman:
+                //-- Режим открытия диалогового окна на добавление
+                dialogMode = "add";
+
+                curItem = -1;
+                curView = null;
+                curHuman = new Human();
+
+                etFirstNameDialog.setText("");
+                etLastNameDialog.setText("");
+                ivGenderDialog.setImageBitmap(pngMale);
+                tvGenderValueDialog.setText(R.string.genderMale);
+
+                Calendar C = Calendar.getInstance();
+                year = C.get(Calendar.YEAR);
+                month = C.get(Calendar.MONTH);
+                day = C.get(Calendar.DAY_OF_MONTH);
+
+                break;
+        }
+
+
+        ivGenderDialog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                changeGender();
+            }
+        });
+
+        dpBirthDialog.updateDate(year, month, day);
+
         alertDialog.show();
+
         return true;
     }
 
@@ -186,8 +287,12 @@ public class MainActivity extends AppCompatActivity {
         {
             throw new IllegalArgumentException("'max' must be grater than 'min'");
         }
-        Random rnd = new Random();
-        return rnd.nextInt(((max - min) + 1) + min);
+
+
+//        Random rnd = new Random();
+//        return rnd.nextInt(((max - min) + 1) + min);
+        max -= min;
+        return (int) (Math.random() * ++max) + min;
     }
 
     private Bitmap getBitmapAsset (String fileName, AssetManager AM)
@@ -218,13 +323,44 @@ public class MainActivity extends AppCompatActivity {
 
         View view = inflater.inflate(R.layout.dialog_human_content, null, false);
 
+        etFirstNameDialog = (EditText) view.findViewById(R.id.etFirstNameDialog);
+        etLastNameDialog = (EditText) view.findViewById(R.id.etLastNameDialog);
+        ivGenderDialog = (ImageView) view.findViewById(R.id.ivGenderDialog);
+        tvGenderValueDialog = (TextView) view.findViewById(R.id.tvGenderValueDialog);
+        dpBirthDialog = (DatePicker) view.findViewById(R.id.dpBirthDialog);
+
         builder.setView(view);
 
         //--    Назначение кнопок
         builder.setPositiveButton("Приментить", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+                
+                int year = dpBirthDialog.getYear();
+                int month = dpBirthDialog.getMonth();
+                int day = dpBirthDialog.getDayOfMonth();
 
+                Human newHuman = new Human(
+                        etFirstNameDialog.getText().toString(),
+                        etLastNameDialog.getText().toString(),
+                        getResources().getString(R.string.genderMale) == tvGenderValueDialog.getText(),
+                        Human.makeCalendar(day, ++month, year)
+                );
+
+                switch (dialogMode)
+                {
+                    case "edit":
+                        humans.set(curItem, newHuman);
+                        break;
+                    case "add":
+                        humans.add(newHuman);
+                        curItem = -1;
+                        curHuman = null;
+                        curView = null;
+                        break;
+                }
+                
+                adapter.notifyDataSetChanged();
             }
         });
         builder.setNegativeButton("Отменить", new DialogInterface.OnClickListener() {
@@ -238,5 +374,22 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
+    private void changeGender(){
+        if (curHuman.gender)
+        {
+            curHuman.gender = false;
+            ivGenderDialog.setImageBitmap(pngFemale);
+            tvGenderValueDialog.setText(R.string.genderFemale);
+        }
+        else
+        {
+            curHuman.gender = true;
+            ivGenderDialog.setImageBitmap(pngMale);
+            tvGenderValueDialog.setText(R.string.genderMale);
+        }
+    }
+    //TODO: Сериализация/десериализация списка в фай
+    //TODO: Загрузка при старте
+    //TODO: Добавить аннотации
+    //TODO: Навести порядок в коде. Удалить комментарии 'debug'
 }

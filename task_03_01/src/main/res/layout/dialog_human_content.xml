@@ -96,7 +96,7 @@
                     android:layout_height="match_parent">
 
                     <ImageView
-                        android:id="@+id/imageView"
+                        android:id="@+id/ivGenderDialog"
                         android:layout_width="128dp"
                         android:layout_height="128dp"
                         android:maxWidth="128dp"
@@ -131,7 +131,7 @@
                 android:textStyle="italic" />
 
             <DatePicker
-                android:id="@+id/datePicker1"
+                android:id="@+id/dpBirthDialog"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:calendarViewShown="false"

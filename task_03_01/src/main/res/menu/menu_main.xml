@@ -5,12 +5,15 @@
     tools:context=".MainActivity">
 
     <item
+        android:id="@+id/menuAddHuman"
         android:icon="@drawable/add_human"
         android:title="Добавить" />
     <item
+        android:id="@+id/menuRemoveHuman"
         android:icon="@drawable/remove_human"
         android:title="Удалить" />
     <item
+        android:id="@+id/menuEditHuman"
         android:icon="@drawable/config_human"
         android:title="Редактировать" />
 

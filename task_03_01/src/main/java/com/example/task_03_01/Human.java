@@ -14,6 +14,14 @@ public class Human {
     public Calendar birthDay;
 
     //-- Class methods -------------------------------
+    public Human()
+    {
+        this.firstName = null;
+        this.lastName = null;
+        this.gender = true;
+        this.birthDay = null;
+    }
+
     public Human(String firstName, String lastName,
                  boolean gender, Calendar birthDay)
     {
