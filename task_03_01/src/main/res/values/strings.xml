@@ -4,4 +4,12 @@
 
     <string name="genderMale">Мужской</string>
     <string name="genderFemale">Женский</string>
+    <string name="dialogTitle">Редактирование сотрудника</string>
+    <string name="dialogFirstName">Фамилия</string>
+    <string name="dialogLastName">Имя</string>
+    <string name="dialogGender">Пол</string>
+    <string name="dialogBirthDay">Дата\nрождения</string>
+    <string name="itemBirthDay">Дата рождения</string>
+    <string name="itemFirstName">Фамилия</string>
+    <string name="itemLastName">Имя</string>
 </resources>

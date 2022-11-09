@@ -13,7 +13,7 @@
         android:shadowDx="5"
         android:shadowDy="5"
         android:shadowRadius="2"
-        android:text="Редактирование сотрудника"
+        android:text="@string/dialogTitle"
         android:textAlignment="center"
         android:textColor="#3569EC"
         android:textSize="20sp"
@@ -36,7 +36,7 @@
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
                 android:gravity="center_vertical|end"
-                android:text="Фамилия"
+                android:text="@string/dialogFirstName"
                 android:textStyle="italic" />
 
             <EditText
@@ -44,9 +44,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:hint="Фамилия"
+                android:hint="@string/dialogFirstName"
                 android:inputType="textPersonName"
-                android:minHeight="48dp" />
+                android:minHeight="48dp"
+                android:autofillHints="@string/dialogFirstName" />
         </TableRow>
 
         <TableRow
@@ -60,7 +61,7 @@
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
                 android:gravity="center_vertical|end"
-                android:text="Имя"
+                android:text="@string/dialogLastName"
                 android:textStyle="italic" />
 
             <EditText
@@ -68,9 +69,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:hint="Имя"
+                android:hint="@string/dialogLastName"
                 android:inputType="textPersonName"
-                android:minHeight="48dp" />
+                android:minHeight="48dp"
+                android:autofillHints="@string/dialogLastName" />
         </TableRow>
 
         <TableRow
@@ -84,7 +86,7 @@
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
                 android:gravity="center_vertical|end"
-                android:text="Пол"
+                android:text="@string/dialogGender"
                 android:textStyle="italic" />
 
             <TableLayout
@@ -93,14 +95,16 @@
 
                 <TableRow
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    tools:ignore="UselessParent">
 
                     <ImageView
                         android:id="@+id/ivGenderDialog"
                         android:layout_width="128dp"
                         android:layout_height="128dp"
                         android:maxWidth="128dp"
-                        app:srcCompat="@drawable/error" />
+                        app:srcCompat="@drawable/error"
+                        android:contentDescription="@string/dialogGender" />
 
                     <TextView
                         android:id="@+id/tvGenderValueDialog"
@@ -108,7 +112,7 @@
                         android:layout_height="match_parent"
                         android:foregroundGravity="center"
                         android:gravity="center"
-                        android:text="Gender"
+                        android:text="@string/dialogGender"
                         app:layout_gravity="center" />
                 </TableRow>
 
@@ -127,7 +131,7 @@
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
                 android:gravity="center_vertical|end"
-                android:text="Дата\nрождения"
+                android:text="@string/dialogBirthDay"
                 android:textStyle="italic" />
 
             <DatePicker
